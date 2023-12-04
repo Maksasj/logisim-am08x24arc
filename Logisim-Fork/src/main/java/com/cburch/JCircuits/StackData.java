@@ -75,6 +75,8 @@ public class StackData implements InstanceData, Cloneable {
         Value push = state.getPort(1);
         Value pop = state.getPort(2);
         Value swap = state.getPort(3);
+        Value setTop = state.getPort(4);
+        Value setNext = state.getPort(5);
 
         if (push == Value.TRUE) {
             stack.push(dataIn.toIntValue());
@@ -94,6 +96,26 @@ public class StackData implements InstanceData, Cloneable {
                 Integer next = stack.pop();
                 stack.push(top);
                 stack.push(next);
+            } else {
+                halt = true;
+            }
+        }
+
+        if (setTop == Value.TRUE) {
+            if (!stack.empty()) {
+                stack.pop();
+                stack.push(dataIn.toIntValue());
+            } else {
+                halt = true;
+            }
+        }
+
+        if (setNext == Value.TRUE) {
+            if (stack.size() > 1) {
+                Integer top = stack.pop();
+                stack.pop();
+                stack.push(dataIn.toIntValue());
+                stack.push(top);
             } else {
                 halt = true;
             }

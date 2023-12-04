@@ -1,6 +1,5 @@
 package com.cburch.JCircuits;
 
-import com.cburch.logisim.data.BitWidth;
 import com.cburch.logisim.data.Bounds;
 import com.cburch.logisim.data.Direction;
 import com.cburch.logisim.data.Value;
@@ -34,6 +33,8 @@ public class JStack extends InstanceFactory {
                 createPort(0, 20, Port.INPUT, 1, "PUSH"),
                 createPort(0, 30, Port.INPUT, 1, "POP"),
                 createPort(0, 40, Port.INPUT, 1, "SWAP"),
+                createPort(0, 50, Port.INPUT, 1, "SET TOP"),
+                createPort(0, 60, Port.INPUT, 1, "SET NEXT"),
                 createPort(10, 70, Port.INPUT, 1, "SEL"),
                 createPort(20, 70, Port.INPUT, 1, "CLOCK"),
                 createPort(50, 10, Port.OUTPUT, BIT_WIDTH_INTEGER, "TOP"),
@@ -51,17 +52,19 @@ public class JStack extends InstanceFactory {
         painter.drawPort(2);
         painter.drawPort(3);
         painter.drawPort(4);
-        painter.drawClock(5, Direction.NORTH);
+        painter.drawPort(5);
         painter.drawPort(6);
-        painter.drawPort(7);
+        painter.drawClock(7, Direction.NORTH);
         painter.drawPort(8);
         painter.drawPort(9);
+        painter.drawPort(10);
+        painter.drawPort(11);
     }
 
     @Override
     public void propagate(InstanceState state) {
-        Value sel = state.getPort(4);
-        Value clock = state.getPort(5);
+        Value sel = state.getPort(6);
+        Value clock = state.getPort(7);
         
         if (sel == Value.TRUE) {
             return;
@@ -75,9 +78,9 @@ public class JStack extends InstanceFactory {
         }
 
         // Set outputs
-        state.setPort(6, data.getTop(), 0);
-        state.setPort(7, data.getNext(), 0);
-        state.setPort(8, data.getSize(), 0);
-        state.setPort(9, data.getHalt(), 0);
+        state.setPort(8, data.getTop(), 0);
+        state.setPort(9, data.getNext(), 0);
+        state.setPort(10, data.getSize(), 0);
+        state.setPort(11, data.getHalt(), 0);
     }
 }
